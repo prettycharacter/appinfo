@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        
+	<!-- Spring注解 Controller -->
+	<context:component-scan base-package="com.appinfo.controller"></context:component-scan>
+	
+	<!-- 注解驱动 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json;charset=UTF-8</value>
+						<value>text/html;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<!-- 视图解析器Internal(内部)Resource(资源)View(视图)Resolver(解析器) -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/pages/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	
+	<!-- 配置静态资源文件放行(配置了/规则)
+			1.如果不想配置 可以将DispatcherServlet的生效规则改为*.do....
+			2.如果配置了/* 无法解决  虽然理论可以解决CSS等静态资源问题 但是jsp也被拦截了
+	 -->
+	 <!-- location:指定本地希望放行的静态资源地址 -->
+	 <!-- mapping：指定映射的规则  -->
+	 <mvc:resources location="/statics/" mapping="/statics/**"></mvc:resources>
+	 
+	 
+	 <!-- 配置拦截器 -->
+	 <!-- <mvc:interceptors>
+	 	<mvc:interceptor>
+	 		path：拦截的规则 可以配置多个
+	 		mvc:mapping纳入拦截
+	 		<mvc:mapping path="/auth/**"/>
+	 		mvc:exclude-mapping取消拦截
+	 		<mvc:exclude-mapping path="/auth/user/dologin"/>
+	 		<mvc:exclude-mapping path="/auth/user/logout"/>
+	 		<mvc:mapping path="/sys/**"/>
+	 		<bean class="cn.smbms.controller.interceptor.AuthInterceptor"></bean>
+	 	</mvc:interceptor>
+	 </mvc:interceptors> -->
+	 
+	 <!-- 全局异常处理 -->
+	 <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	 	<!-- 当出现某个异常的时候 可以进行页面跳转(请求转发) -->
+	 	<property name="exceptionMappings">
+	 		<props>
+	 			<!-- <prop key="cn.smbms.utils.exception.NoPermitException">redirect:/401.jsp</prop> -->
+	 			<prop key="java.lang.Exception">redirect:/500.jsp</prop>
+	 		</props>
+	 	</property>
+	 </bean>
+	 
+	 <!-- 支持文件上传 -->
+	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	 	<!-- 3M -->
+	 	<!-- <property name="maxUploadSize" value="3145728"></property> -->
+	 	<property name="defaultEncoding" value="UTF-8"></property>
+	 </bean>
+</beans>

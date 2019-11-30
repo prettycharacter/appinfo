@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ 
+<configuration>
+
+	<settings>
+		<!-- 默认映射级别
+			只要不出现association 和 collection标签  哪怕在自定义映射时  也只需要配置不一样的即可 -->
+		<!-- <setting name="autoMappingBehavior" value="PARTIAL"/> -->
+		<!-- NONE表示取消自动映射 -->
+		<!-- <setting name="autoMappingBehavior" value="NONE"/> -->
+		<!-- 最高级别的映射规则 无视 association和collection标签-->
+		<setting name="autoMappingBehavior" value="FULL"/>
+	</settings>
+	
+	<!-- 类型别名 -->
+	<typeAliases>
+		<package name="com.appinfo.pojo"/>
+	</typeAliases>
+	
+</configuration>
